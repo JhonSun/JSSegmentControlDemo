@@ -28,8 +28,8 @@
 @interface JSSegmentControl : UIScrollView
 
 @property (nonatomic, strong) JSSegmentControlConfig *config;
-@property (nonatomic, assign) NSInteger selectIndex;//当前选中，默认0
 @property (nonatomic, copy) NSArray *titleArray;//按钮标题，必须设置, 必须是最后设置
+@property (nonatomic, assign) NSInteger selectIndex;//当前选中，默认0，设置完titleArray才能设置这个
 
 @property (nonatomic, copy) void (^clickButtonEvent)(NSInteger clickIndex);
 

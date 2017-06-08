@@ -40,6 +40,7 @@
         _segmentControl.config.buttonHeight = 30;
         _segmentControl.config.buttonCorner = 5;
         _segmentControl.titleArray = titleArray;
+        _segmentControl.selectIndex = 3;
     }
     return _segmentControl;
 }

@@ -157,6 +157,10 @@
 #pragma mark - public
 - (void)setSelectIndex:(NSInteger)selectIndex {
     _selectIndex = selectIndex;
+    if (_selectIndex > 0) {
+        NSAssert(self.titleArray.count > 0, @"请先设置titleArray");
+        NSAssert(_selectIndex < self.titleArray.count, @"你选择的index超出titleArray的范围");
+    }
     CGRect frame = self.bottomScrollView.frame;
     frame.origin.x = self.selectIndex * self.config.buttonWidth + (self.selectIndex + 1) * self.config.buttonSpace;
     [UIView animateWithDuration:animationDurtion animations:^{
