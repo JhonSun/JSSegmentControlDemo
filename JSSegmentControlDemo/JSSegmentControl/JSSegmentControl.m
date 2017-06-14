@@ -142,16 +142,21 @@
 }
 
 - (void)changeButtonLocation {
+    CGFloat x = self.contentOffset.x;
     UIButton *selectButton = self.buttonArray[self.selectIndex];
     CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat buttonWidth = selectButton.frame.size.width;
     CGFloat originX = selectButton.frame.origin.x;
     if (originX + buttonWidth > screenWidth / 2 && self.contentSize.width - originX > screenWidth / 2) {
-        CGFloat x = originX  + buttonWidth / 2 - (screenWidth / 2);
-        [UIView animateWithDuration:animationDurtion animations:^{
-            [self setContentOffset:CGPointMake(x, 0)];
-        }];
+        x = originX  + buttonWidth / 2 - (screenWidth / 2);
+    } else if (originX + buttonWidth <= screenWidth / 2) {
+        x = 0;
+    } else if (self.contentSize.width - originX <= screenWidth / 2) {
+        x = self.contentSize.width - screenWidth;
     }
+    [UIView animateWithDuration:animationDurtion animations:^{
+        [self setContentOffset:CGPointMake(x, 0)];
+    }];
 }
 
 #pragma mark - public
