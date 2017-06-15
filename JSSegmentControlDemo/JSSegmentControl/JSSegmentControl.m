@@ -73,11 +73,13 @@
     }
     [self.buttonArray removeAllObjects];
     CGFloat contentWidth = 0;
+    CGFloat buttonOriginX = self.config.buttonSpace;
     for (int i = 0;i < _titleArray.count;i++) {
         NSString *title = _titleArray[i];
         CGFloat buttonWidth = self.config.buttonWidth;
         if (self.config.isAutoAdaptWidth) buttonWidth = [title boundingRectWithSize:CGSizeMake(MAXFLOAT, self.config.buttonHeight) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName : self.config.titleFont} context:nil].size.width + buttonAutoAdaptOtherWidth;
-        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(i * buttonWidth + (i + 1) * self.config.buttonSpace, (self.bounds.size.height - self.config.buttonHeight) / 2, buttonWidth, self.config.buttonHeight)];
+        
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(buttonOriginX, (self.bounds.size.height - self.config.buttonHeight) / 2, buttonWidth, self.config.buttonHeight)];
         button.titleLabel.font = self.config.titleFont;
         button.layer.cornerRadius = self.config.buttonCorner;
         button.layer.masksToBounds = YES;
@@ -86,6 +88,7 @@
         [self addSubview:button];
         [self.buttonArray addObject:button];
         contentWidth = button.frame.origin.x + buttonWidth + self.config.buttonSpace;
+        buttonOriginX += self.config.buttonSpace + buttonWidth;
     }
     self.bottomView.frame = CGRectMake(0, self.bounds.size.height - self.config.bottomViewHeight, contentWidth, self.config.bottomViewHeight);
     self.bottomView.backgroundColor = self.config.bottomViewColor;
@@ -142,16 +145,17 @@
 }
 
 - (void)changeButtonLocation {
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    if (self.contentSize.width <= screenWidth) return;
     CGFloat x = self.contentOffset.x;
     UIButton *selectButton = self.buttonArray[self.selectIndex];
-    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat buttonWidth = selectButton.frame.size.width;
     CGFloat originX = selectButton.frame.origin.x;
-    if (originX + buttonWidth > screenWidth / 2 && self.contentSize.width - originX > screenWidth / 2) {
+    if (originX > screenWidth / 2 && self.contentSize.width - originX - buttonWidth > screenWidth / 2) {
         x = originX  + buttonWidth / 2 - (screenWidth / 2);
-    } else if (originX + buttonWidth <= screenWidth / 2) {
+    } else if (originX <= screenWidth / 2) {
         x = 0;
-    } else if (self.contentSize.width - originX <= screenWidth / 2) {
+    } else if (self.contentSize.width - originX - buttonWidth <= screenWidth / 2) {
         x = self.contentSize.width - screenWidth;
     }
     [UIView animateWithDuration:animationDurtion animations:^{
